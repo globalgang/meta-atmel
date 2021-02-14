@@ -15,14 +15,44 @@ LIC_FILES_CHKSUM = "file://main.c;endline=27;md5=42f86d2f6fd17d1221c5c651b487a07
 
 inherit cml1 deploy
 
+DEPENDS += "bc-native python3-native"
+
 AT91BOOTSTRAP_MACHINE ??= "${MACHINE}"
 
 AT91BOOTSTRAP_CONFIG ??= "${AT91BOOTSTRAP_MACHINE}nf_uboot"
+AT91BOOTSTRAP_CONFIG_at91sam9x5ek-sd ??= "${AT91BOOTSTRAP_MACHINE}sd_uboot"
+AT91BOOTSTRAP_CONFIG_sama5d3-xplained-sd ??= "${AT91BOOTSTRAP_MACHINE}sd_uboot"
 AT91BOOTSTRAP_CONFIG_sama5d4ek ??= "${AT91BOOTSTRAP_MACHINE}nf_uboot_secure"
 AT91BOOTSTRAP_CONFIG_sama5d4-xplained ??= "${AT91BOOTSTRAP_MACHINE}nf_uboot_secure"
+AT91BOOTSTRAP_CONFIG_sama5d4-xplained-sd ??= "${AT91BOOTSTRAP_MACHINE}sd_uboot_secure"
+AT91BOOTSTRAP_CONFIG_sama5d2-xplained ??= "${AT91BOOTSTRAP_MACHINE}-bsrdf_uboot"
+AT91BOOTSTRAP_CONFIG_sama5d2-xplained-emmc ??= "${AT91BOOTSTRAP_MACHINE}emmc_uboot"
+AT91BOOTSTRAP_CONFIG_sama5d2-xplained-sd ??= "${AT91BOOTSTRAP_MACHINE}-bsrsd_uboot"
+AT91BOOTSTRAP_CONFIG_sama5d2-ptc-ek-sd ??= "${AT91BOOTSTRAP_MACHINE}sd_uboot"
+AT91BOOTSTRAP_CONFIG_sama5d27-som1-ek ??= "${AT91BOOTSTRAP_MACHINE}qspi_uboot"
+AT91BOOTSTRAP_CONFIG_sama5d27-som1-ek-sd ??= "${AT91BOOTSTRAP_MACHINE}sd_uboot"
+AT91BOOTSTRAP_CONFIG_sama5d27-wlsom1-ek-sd ??= "${AT91BOOTSTRAP_MACHINE}-bsrsd_uboot"
+AT91BOOTSTRAP_CONFIG_sama5d2-icp-sd ??= "${AT91BOOTSTRAP_MACHINE}-bsrsd_uboot"
+AT91BOOTSTRAP_CONFIG_sam9x60ek ??= "${AT91BOOTSTRAP_MACHINE}nf_uboot"
+AT91BOOTSTRAP_CONFIG_sam9x60ek-sd ??= "${AT91BOOTSTRAP_MACHINE}sd_uboot"
+AT91BOOTSTRAP_CONFIG_sama7g5ek-sd ??= "${AT91BOOTSTRAP_MACHINE}sd_uboot"
+AT91BOOTSTRAP_CONFIG_sama7g5ek-emmc ??= "${AT91BOOTSTRAP_MACHINE}emmc_uboot"
 
 AT91BOOTSTRAP_TARGET ??= "${AT91BOOTSTRAP_CONFIG}_defconfig"
 AT91BOOTSTRAP_LOAD ??= "nandflashboot-uboot"
+AT91BOOTSTRAP_LOAD_at91sam9x5ek-sd ??= "sdboot-uboot"
+AT91BOOTSTRAP_LOAD_sama5d2-xplained ??= "dataflashboot-uboot"
+AT91BOOTSTRAP_LOAD_sama5d2-xplained-sd ??= "sdboot-uboot"
+AT91BOOTSTRAP_LOAD_sama5d27-ptc-ek-sd ??= "sdboot-uboot"
+AT91BOOTSTRAP_LOAD_sama5d27-som1-ek ??= "qspiboot-uboot"
+AT91BOOTSTRAP_LOAD_sama5d27-som1-ek-sd ??= "sdboot-uboot"
+AT91BOOTSTRAP_LOAD_sama5d27-wlsom1-ek-sd ??= "sdboot-uboot"
+AT91BOOTSTRAP_LOAD_sama5d3-xplained-sd ??= "sdboot-uboot"
+AT91BOOTSTRAP_LOAD_sama5d4-xplained-sd ??= "sdboot-uboot"
+AT91BOOTSTRAP_LOAD_sama5d2-icp-sd ??= "sdboot-uboot"
+AT91BOOTSTRAP_LOAD_sam9x60ek-sd ??= "sdboot-uboot"
+AT91BOOTSTRAP_LOAD_sama7g5ek-sd ??= "sdboot-uboot"
+AT91BOOTSTRAP_LOAD_sama7g5ek-emmc ??= "sdboot-uboot"
 
 AT91BOOTSTRAP_SUFFIX ?= "bin"
 AT91BOOTSTRAP_IMAGE ?= "${AT91BOOTSTRAP_MACHINE}-${AT91BOOTSTRAP_LOAD}-${PV}.${AT91BOOTSTRAP_SUFFIX}"
@@ -54,7 +84,7 @@ do_configure() {
 }
 
 do_compile() {
-	if [ "${@base_contains('DISTRO_FEATURES', 'ld-is-gold', 'ld-is-gold', '', d)}" = "ld-is-gold" ] ; then
+	if [ "${@bb.utils.contains('DISTRO_FEATURES', 'ld-is-gold', 'ld-is-gold', '', d)}" = "ld-is-gold" ] ; then
 		sed -i 's/$(CROSS_COMPILE)ld$/$(CROSS_COMPILE)ld.bfd/g' ${S}/Makefile
 	fi
 
@@ -78,3 +108,5 @@ do_deploy () {
 addtask deploy before do_build after do_compile
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+
+TOOLCHAIN = "gcc"

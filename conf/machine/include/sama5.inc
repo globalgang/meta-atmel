@@ -7,10 +7,11 @@ SOC_FAMILY = "sama5"
 
 PREFERRED_PROVIDER_virtual/kernel_sama5 ?= "linux-at91"
 PREFERRED_PROVIDER_virtual/bootloader_sama5 ?= "u-boot-at91"
+PREFERRED_PROVIDER_u-boot_sama5 ?= "u-boot-at91"
 
 PREFERRED_PROVIDER_jpeg ?= "jpeg"
 PREFERRED_PROVIDER_jpeg-native ?= "jpeg-native"
 
-
-# used by sysvinit_2
-SERIAL_CONSOLE ?= "115200 ttyS0"
+SERIAL_CONSOLES ?= "115200;ttyS0"
+WIC_CREATE_EXTRA_ARGS ?= "--no-fstab-update"
+EXTRA_IMAGEDEPENDS += "sam-ba-native"

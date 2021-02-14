@@ -7,6 +7,8 @@ SOC_FAMILY = "at91sam9"
 
 PREFERRED_PROVIDER_virtual/kernel_at91sam9 ?= "linux-at91"
 PREFERRED_PROVIDER_virtual/bootloader_at91sam9 ?= "u-boot-at91"
+PREFERRED_PROVIDER_u-boot_at91sam9 ?= "u-boot-at91"
 
-# used by sysvinit_2
-SERIAL_CONSOLE ?= "115200 ttyS0"
+SERIAL_CONSOLES ?= "115200;ttyS0"
+
+EXTRA_IMAGEDEPENDS += "sam-ba-native"
